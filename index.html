@@ -113,6 +113,26 @@
                         Auto-start breaks and pomodoros
                     </label>
                 </div>
+                <div class="setting-item">
+                    <label for="notificationSound">Notification Sound:</label>
+                    <select id="notificationSound" class="sound-select">
+                        <option value="bell">Bell</option>
+                        <option value="chime">Chime</option>
+                        <option value="gong">Gong</option>
+                        <option value="soft-bell">Soft Bell</option>
+                        <option value="digital">Digital</option>
+                        <option value="wooden">Wooden Block</option>
+                        <option value="temple-bell">Temple Bell</option>
+                        <option value="crystal">Crystal</option>
+                        <option value="zen">Zen Bowl</option>
+                        <option value="bamboo">Bamboo</option>
+                    </select>
+                    <button id="previewSound" class="preview-sound-btn">Preview Sound</button>
+                </div>
+                <div class="setting-item">
+                    <label for="volume">Volume: <span id="volumeValue">50</span>%</label>
+                    <input type="range" id="volume" min="0" max="100" value="50" class="volume-slider">
+                </div>
                 <button id="saveSettings" class="save-settings-btn">Save Settings</button>
             </div>
         </div>
