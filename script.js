@@ -7,7 +7,9 @@ class PomodoroTimer {
             pomodoro: 25,
             shortBreak: 5,
             longBreak: 15,
-            autoStart: false
+            autoStart: false,
+            notificationSound: 'bell',
+            volume: 50
         };
 
         // Timer state
@@ -30,6 +32,10 @@ class PomodoroTimer {
         this.closeModal = document.querySelector('.close');
         this.saveSettingsBtn = document.getElementById('saveSettings');
         this.progressCircle = document.querySelector('.progress-ring-circle');
+        this.soundSelect = document.getElementById('notificationSound');
+        this.volumeSlider = document.getElementById('volume');
+        this.volumeValue = document.getElementById('volumeValue');
+        this.previewSoundBtn = document.getElementById('previewSound');
 
         // Circle properties
         this.circleRadius = 140;
@@ -61,6 +67,10 @@ class PomodoroTimer {
         this.settingsBtn.addEventListener('click', () => this.openSettings());
         this.closeModal.addEventListener('click', () => this.closeSettings());
         this.saveSettingsBtn.addEventListener('click', () => this.saveSettings());
+        this.previewSoundBtn.addEventListener('click', () => this.playNotificationSound());
+        this.volumeSlider.addEventListener('input', (e) => {
+            this.volumeValue.textContent = e.target.value;
+        });
 
         // Close modal when clicking outside
         window.addEventListener('click', (e) => {
@@ -189,22 +199,66 @@ class PomodoroTimer {
     }
 
     playNotificationSound() {
-        // Create a simple beep using Web Audio API
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const soundType = this.soundSelect ? this.soundSelect.value : this.settings.notificationSound;
+        const volume = (this.volumeSlider ? this.volumeSlider.value : this.settings.volume) / 100;
+
+        // Define sound characteristics for each type
+        const sounds = {
+            'bell': { freq: 800, type: 'sine', duration: 0.8, decay: true },
+            'chime': { freq: 1200, type: 'sine', duration: 1.2, decay: true },
+            'gong': { freq: 200, type: 'sine', duration: 2.0, decay: true },
+            'soft-bell': { freq: 600, type: 'sine', duration: 1.0, decay: true },
+            'digital': { freq: 1000, type: 'square', duration: 0.3, decay: false },
+            'wooden': { freq: 400, type: 'triangle', duration: 0.2, decay: false },
+            'temple-bell': { freq: 350, type: 'sine', duration: 2.5, decay: true },
+            'crystal': { freq: 1500, type: 'sine', duration: 1.0, decay: true },
+            'zen': { freq: 520, type: 'sine', duration: 2.0, decay: true },
+            'bamboo': { freq: 700, type: 'triangle', duration: 0.4, decay: false }
+        };
+
+        const sound = sounds[soundType] || sounds['bell'];
+
+        // Create oscillator for main tone
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
 
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
 
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
+        oscillator.frequency.value = sound.freq;
+        oscillator.type = sound.type;
 
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        // Set volume and decay
+        if (sound.decay) {
+            gainNode.gain.setValueAtTime(volume * 0.5, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
+        } else {
+            gainNode.gain.setValueAtTime(volume * 0.3, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(volume * 0.3, audioContext.currentTime + sound.duration - 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
+        }
+
+        // For some sounds, add harmonics
+        if (['bell', 'chime', 'temple-bell', 'crystal'].includes(soundType)) {
+            const harmonic = audioContext.createOscillator();
+            const harmonicGain = audioContext.createGain();
+
+            harmonic.connect(harmonicGain);
+            harmonicGain.connect(audioContext.destination);
+
+            harmonic.frequency.value = sound.freq * 2;
+            harmonic.type = 'sine';
+
+            harmonicGain.gain.setValueAtTime(volume * 0.15, audioContext.currentTime);
+            harmonicGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration * 0.7);
+
+            harmonic.start(audioContext.currentTime);
+            harmonic.stop(audioContext.currentTime + sound.duration);
+        }
 
         oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
+        oscillator.stop(audioContext.currentTime + sound.duration);
     }
 
     showNotification() {
@@ -235,6 +289,9 @@ class PomodoroTimer {
         document.getElementById('shortBreakTime').value = this.settings.shortBreak;
         document.getElementById('longBreakTime').value = this.settings.longBreak;
         document.getElementById('autoStart').checked = this.settings.autoStart;
+        document.getElementById('notificationSound').value = this.settings.notificationSound;
+        document.getElementById('volume').value = this.settings.volume;
+        document.getElementById('volumeValue').textContent = this.settings.volume;
 
         this.settingsModal.style.display = 'block';
     }
@@ -248,6 +305,8 @@ class PomodoroTimer {
         this.settings.shortBreak = parseInt(document.getElementById('shortBreakTime').value);
         this.settings.longBreak = parseInt(document.getElementById('longBreakTime').value);
         this.settings.autoStart = document.getElementById('autoStart').checked;
+        this.settings.notificationSound = document.getElementById('notificationSound').value;
+        this.settings.volume = parseInt(document.getElementById('volume').value);
 
         // Save to localStorage
         localStorage.setItem('pomodoroSettings', JSON.stringify(this.settings));

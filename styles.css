@@ -455,6 +455,87 @@ body::before {
     box-shadow: 0 5px 20px rgba(74, 124, 44, 0.4);
 }
 
+/* Sound and Volume Settings */
+.sound-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--matcha-green);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    background: white;
+    color: var(--forest-green);
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.sound-select:focus {
+    outline: none;
+    border-color: var(--jade-green);
+    box-shadow: 0 0 0 3px rgba(74, 124, 44, 0.2);
+}
+
+.preview-sound-btn {
+    width: 100%;
+    padding: 8px;
+    background: white;
+    color: var(--forest-green);
+    border: 2px solid var(--matcha-green);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preview-sound-btn:hover {
+    background: var(--light-green);
+    transform: translateY(-2px);
+}
+
+.volume-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(to right, var(--light-green), var(--matcha-green));
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--matcha-green);
+    cursor: pointer;
+    box-shadow: 0 2px 5px var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    background: var(--jade-green);
+    transform: scale(1.2);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--matcha-green);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 5px var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+    background: var(--jade-green);
+    transform: scale(1.2);
+}
+
 /* Falling leaves animation */
 .falling-leaves {
     position: fixed;
