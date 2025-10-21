@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer - 和の心</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Background decorative elements -->
+        <div class="bamboo-left"></div>
+        <div class="bamboo-right"></div>
+
+        <!-- Main content -->
+        <div class="pomodoro-card">
+            <h1 class="title">
+                <span class="kanji">集中</span>
+                <span class="subtitle">Pomodoro Timer</span>
+            </h1>
+
+            <!-- Mode selector -->
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="pomodoro">
+                    <span class="mode-kanji">作業</span>
+                    <span class="mode-text">Work</span>
+                </button>
+                <button class="mode-btn" data-mode="shortBreak">
+                    <span class="mode-kanji">小休憩</span>
+                    <span class="mode-text">Short Break</span>
+                </button>
+                <button class="mode-btn" data-mode="longBreak">
+                    <span class="mode-kanji">長休憩</span>
+                    <span class="mode-text">Long Break</span>
+                </button>
+            </div>
+
+            <!-- Timer display -->
+            <div class="timer-display">
+                <div class="timer-circle">
+                    <svg class="progress-ring" width="300" height="300">
+                        <circle class="progress-ring-circle-bg"
+                                stroke="#2d5016"
+                                stroke-width="8"
+                                fill="transparent"
+                                r="140"
+                                cx="150"
+                                cy="150"/>
+                        <circle class="progress-ring-circle"
+                                stroke="#4a7c2c"
+                                stroke-width="8"
+                                fill="transparent"
+                                r="140"
+                                cx="150"
+                                cy="150"/>
+                    </svg>
+                    <div class="timer-text">
+                        <span id="minutes">25</span>:<span id="seconds">00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control buttons -->
+            <div class="controls">
+                <button id="startBtn" class="control-btn start-btn">
+                    <span class="btn-kanji">開始</span>
+                    <span class="btn-text">Start</span>
+                </button>
+                <button id="pauseBtn" class="control-btn pause-btn" style="display: none;">
+                    <span class="btn-kanji">一時停止</span>
+                    <span class="btn-text">Pause</span>
+                </button>
+                <button id="resetBtn" class="control-btn reset-btn">
+                    <span class="btn-kanji">リセット</span>
+                    <span class="btn-text">Reset</span>
+                </button>
+            </div>
+
+            <!-- Session counter -->
+            <div class="session-info">
+                <div class="session-counter">
+                    <span class="session-label">Sessions Completed:</span>
+                    <span id="sessionCount" class="session-number">0</span>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="settings">
+                <button id="settingsBtn" class="settings-btn">⚙️ Settings</button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Timer Settings</h2>
+                <div class="setting-item">
+                    <label for="pomodoroTime">Work Duration (minutes):</label>
+                    <input type="number" id="pomodoroTime" min="1" max="60" value="25">
+                </div>
+                <div class="setting-item">
+                    <label for="shortBreakTime">Short Break (minutes):</label>
+                    <input type="number" id="shortBreakTime" min="1" max="30" value="5">
+                </div>
+                <div class="setting-item">
+                    <label for="longBreakTime">Long Break (minutes):</label>
+                    <input type="number" id="longBreakTime" min="1" max="60" value="15">
+                </div>
+                <div class="setting-item">
+                    <label for="autoStart">
+                        <input type="checkbox" id="autoStart">
+                        Auto-start breaks and pomodoros
+                    </label>
+                </div>
+                <button id="saveSettings" class="save-settings-btn">Save Settings</button>
+            </div>
+        </div>
+
+        <!-- Decorative elements -->
+        <div class="falling-leaves">
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
